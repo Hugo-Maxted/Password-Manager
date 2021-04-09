@@ -1,16 +1,30 @@
 #include <iostream>
-
+#include <fstream>
 #include <string>
-
-#include <cmath>
+#include <windows.h>
 
 using namespace std;
 
 int main()
 {
+  string cmd;
+  string i = "";
+
+  ifstream Config("C:/ProgramData/Password Manager/config.json");
+  getline(Config, i);
+
+  if (i == "")
+  {
+    cout << "Commencing initial setup.\n";
+    Config.close();
+    CreateDirectory("C:/ProgramData/Password Manager", NULL);
+    ofstream Config("C:/ProgramData/Password Manager/config.json");
+    Config << "Temp";
+    Config.close();
+  }
+
   while (true)
   {
-    string cmd;
     cout << ">>> ";
     cin >> cmd;
     if (cmd == "add")
