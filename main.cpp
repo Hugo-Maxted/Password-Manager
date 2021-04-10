@@ -1,6 +1,9 @@
 #include <iostream>
+
 #include <fstream>
+
 #include <string>
+
 #include <windows.h>
 
 using namespace std;
@@ -10,6 +13,7 @@ int main()
   string cmd;
   string i = "";
   string DataArr[100] = {};
+  string DataTemp;
   int count = 0;
 
   ifstream DataCheck("C:/ProgramData/Password Manager/data");
@@ -42,7 +46,6 @@ int main()
     }
     else if (cmd == "get")
     {
-      
     }
     else if (cmd == "help")
     {
@@ -54,11 +57,19 @@ int main()
     }
     else if (cmd == "exit")
     {
-      break;
+      exit(0);
     }
     else
     {
       cout << "Unknown command '" << cmd << "' use help for a list off all commands.\n";
     }
   }
+}
+
+string Encript(string input, string key)
+{
+}
+
+string Decript(string input, string key)
+{
 }
