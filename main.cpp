@@ -3,6 +3,7 @@
 #include <string>
 #include <windows.h>
 #include <cstring>
+#include <vector>
 
 using namespace std;
 
@@ -23,6 +24,24 @@ string encript(string input, string key)
     output[i] = input[i] ^ keyChars[i % (sizeof(keyChars) / sizeof(char))];
   }
   return output;
+}
+
+void split(string s, vector<string> &v)
+{
+  string temp = "";
+  for (int i = 0; i < s.length(); ++i)
+  {
+    if (s[i] == ' ')
+    {
+      v.push_back(temp);
+      temp = "";
+    }
+    else
+    {
+      temp.push_back(s[i]);
+    }
+  }
+  v.push_back(temp);
 }
 
 int main()
@@ -56,18 +75,26 @@ int main()
 
   while (true)
   {
+    string params;
+    vector<string> v;
     cout << ">>> ";
     cin >> cmd;
+    getline(cin, params);
+    params.erase(0, 1);
+    split(params, v);
     if (cmd == "add")
     {
+      ofstream DataWrite("C:/ProgramData/Password Manager/data");
+      DataWrite << v[0] << v[1] << encript(v[2], v[3]);
+      DataWrite.close();
     }
     else if (cmd == "get")
     {
-      cout << encript(encript("pogchamp", "KEY"), "KEY");
+      cout << encript(encript(v[0], "KEY"), "KEY");
     }
     else if (cmd == "help")
     {
-      cout << "Usage [command] [params]\n\nCommands:\n  add [name] [username] [password] - Adds a new password.\n  get [name] [master password] - Fetches and returns username + password.\n  help - Displays all commands and information.\n  version - Displays the version.\n  exit - Exits the program.\n";
+      cout << "Usage [command] [params]\n\nCommands:\n  add [name] [username] [password] [encryption key] - Adds a new password.\n  get [name] [encryption key] - Fetches and returns username + password.\n  help - Displays all commands and information.\n  version - Displays the version.\n  exit - Exits the program.\n";
     }
     else if (cmd == "version")
     {
