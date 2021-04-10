@@ -9,8 +9,9 @@ int main()
 {
   string cmd;
   string i = "";
+  string response = "";
 
-  ifstream Config("C:/ProgramData/Password Manager/config.json");
+  ifstream Config("C:/ProgramData/Password Manager/.config");
   getline(Config, i);
 
   if (i == "")
@@ -18,10 +19,29 @@ int main()
     cout << "Commencing initial setup.\n";
     Config.close();
     CreateDirectory("C:/ProgramData/Password Manager", NULL);
-    ofstream Config("C:/ProgramData/Password Manager/config.json");
-    Config << "Temp";
-    Config.close();
-  }
+    ofstream Config("C:/ProgramData/Password Manager/.config");
+    cout << "Require Master Password when retrieveing passwords (y/n)?\n>>> ";
+    cin >> response;
+    while (true)
+    {
+      if (response != "y" || response != "x")
+      {
+        break;
+      }
+      cout << "Invalid input\n>>> ";
+      cout << response;
+      cin >> response;
+    }
+    if (response == "y")
+    {
+      Config << "True";
+    }
+    else if (response == "n")
+    {
+      Config << "False";
+    }
+      Config.close();
+    }
 
   while (true)
   {
