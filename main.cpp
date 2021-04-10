@@ -9,22 +9,29 @@ int main()
 {
   string cmd;
   string i = "";
-  string DataArr;
+  string DataArr[100] = {};
+  int count = 0;
 
-  ifstream DataRead("C:/ProgramData/Password Manager/data");
-  getline(DataRead, i);
+  ifstream DataCheck("C:/ProgramData/Password Manager/data");
+  getline(DataCheck, i);
+  DataCheck.close();
 
   if (i == "")
   {
     cout << "Commencing initial setup.\n";
-    DataRead.close();
     CreateDirectory("C:/ProgramData/Password Manager", NULL);
     ofstream DataNew("C:/ProgramData/Password Manager/data");
     DataNew.close();
-    ifstream DataRead("C:/ProgramData/Password Manager/data");
-    }
+    cout << "Setup Complete.\n";
+  }
 
-    
+  ifstream DataRead("C:/ProgramData/Password Manager/data");
+
+  while (getline(DataRead, i))
+  {
+    DataArr[count] = i;
+    count++;
+  }
 
   while (true)
   {
