@@ -1,12 +1,29 @@
 #include <iostream>
-
 #include <fstream>
-
 #include <string>
-
 #include <windows.h>
+#include <cstring>
 
 using namespace std;
+
+string SplitSTR(string input)
+{
+  string split = input;
+  char array[split.length() + 1];
+  strcpy(array, split.c_str());
+  return array;
+}
+
+string encript(string input, string key)
+{
+  string output = input;
+  string keyChars = SplitSTR(key);
+  for (int i = 0; i < output.size(); i++)
+  {
+    output[i] = input[i] ^ keyChars[i % (sizeof(keyChars) / sizeof(char))];
+  }
+  return output;
+}
 
 int main()
 {
@@ -46,6 +63,7 @@ int main()
     }
     else if (cmd == "get")
     {
+      cout << encript(encript("pogchamp", "KEY"), "KEY");
     }
     else if (cmd == "help")
     {
@@ -64,12 +82,4 @@ int main()
       cout << "Unknown command '" << cmd << "' use help for a list off all commands.\n";
     }
   }
-}
-
-string Encript(string input, string key)
-{
-}
-
-string Decript(string input, string key)
-{
 }
