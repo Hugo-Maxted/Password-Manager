@@ -9,39 +9,22 @@ int main()
 {
   string cmd;
   string i = "";
-  string response = "";
+  string DataArr;
 
-  ifstream Config("C:/ProgramData/Password Manager/.config");
-  getline(Config, i);
+  ifstream DataRead("C:/ProgramData/Password Manager/data");
+  getline(DataRead, i);
 
   if (i == "")
   {
     cout << "Commencing initial setup.\n";
-    Config.close();
+    DataRead.close();
     CreateDirectory("C:/ProgramData/Password Manager", NULL);
-    ofstream Config("C:/ProgramData/Password Manager/.config");
-    cout << "Require Master Password when retrieveing passwords (y/n)?\n>>> ";
-    cin >> response;
-    while (true)
-    {
-      if (response != "y" || response != "x")
-      {
-        break;
-      }
-      cout << "Invalid input\n>>> ";
-      cout << response;
-      cin >> response;
+    ofstream DataNew("C:/ProgramData/Password Manager/data");
+    DataNew.close();
+    ifstream DataRead("C:/ProgramData/Password Manager/data");
     }
-    if (response == "y")
-    {
-      Config << "True";
-    }
-    else if (response == "n")
-    {
-      Config << "False";
-    }
-      Config.close();
-    }
+
+    
 
   while (true)
   {
