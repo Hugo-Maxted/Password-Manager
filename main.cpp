@@ -79,7 +79,6 @@ int main()
 {
   string cmd;
   string i = "";
-  string DataArr[100] = {};
   string DataTemp;
   int count = 0;
 
@@ -97,14 +96,6 @@ int main()
     cout << "Setup Complete.\n";
   }
 
-  ifstream DataRead("C:/ProgramData/Password Manager/data");
-
-  while (getline(DataRead, i))
-  {
-    DataArr[count] = i;
-    count++;
-  }
-
   while (true)
   {
     string params;
@@ -117,13 +108,25 @@ int main()
     if (cmd == "add")
     {
       ofstream DataWrite("C:/ProgramData/Password Manager/" + v[0] + ".password");
-      DataWrite << v[1] << "\n"
-                << encrypt(v[2], v[3]);
+      DataWrite << v[1] << "\n" << encrypt(v[2], v[3]);
       DataWrite.close();
     }
     else if (cmd == "get")
     {
-      cout << encrypt(v[0], v[1]) << "\n" << encrypt(encrypt(v[0], v[1]), v[1]) << "\n";
+      ifstream DataRead("C:/ProgramData/Password Manager/" + v[0] + ".password");
+      int count = 0;
+      while (getline(DataRead, i))
+      {
+        switch (count) {
+          case 0:
+            cout << "Username: " << i << "\n";
+            break;
+          case 1:
+            cout << "Password: " << encrypt(i, v[1]) << "\n";
+            break;
+        }
+        count++;
+      }
     }
     else if (cmd == "help")
     {
