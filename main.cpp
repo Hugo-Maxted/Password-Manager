@@ -134,7 +134,7 @@ int main()
     }
     else if (cmd == "version")
     {
-      cout << "0.0.1";
+      cout << "0.1.0";
     }
     else if (cmd == "exit")
     {
