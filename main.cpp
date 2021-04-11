@@ -72,6 +72,23 @@ void split(string s, vector<string> &v)
   v.push_back(temp);
 }
 
+void copyToClipboard(const string &s)
+{
+  OpenClipboard(0);
+  EmptyClipboard();
+  HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, s.size());
+  if (!hg)
+  {
+    CloseClipboard();
+    return;
+  }
+  memcpy(GlobalLock(hg), s.c_str(), s.size());
+  GlobalUnlock(hg);
+  SetClipboardData(CF_TEXT, hg);
+  CloseClipboard();
+  GlobalFree(hg);
+}
+
 int main()
 {
   string cmd;
@@ -138,7 +155,8 @@ int main()
     if (cmd == "add")
     {
       ofstream DataWrite("C:/ProgramData/Password Manager/" + v[0] + ".password");
-      DataWrite << v[1] << "\n" << encrypt(v[2], v[3]);
+      DataWrite << v[1] << "\n"
+                << encrypt(v[2], v[3]);
       DataWrite.close();
       cout << "Added: " << v[0] << ", with username: " << v[1] << ", and encrypted password as: " << encrypt(v[2], v[3]) << ".\n";
     }
@@ -149,19 +167,24 @@ int main()
       count = 0;
       while (getline(DataRead, i))
       {
-        switch (count) {
-          case 0:
-            if (i == "Deleted")
-            {
-              cout << "No Password found.\n";
-              break;
-            }
-            cout << v[0] << ":\n";
-            cout << "Username: " << i << "\n";
+        switch (count)
+        {
+        case 0:
+          if (i == "Deleted")
+          {
+            cout << "No Password found.\n";
             break;
-          case 1:
-            cout << "Password: " << encrypt(i, v[1]) << "\n";
-            break;
+          }
+          cout << v[0] << ":\n";
+          cout << "Username: " << i << "\n";
+          break;
+        case 1:
+          cout << "Password: " << encrypt(i, v[1]) << "\n";
+          if (copy)
+          {
+            copyToClipboard(encrypt(i, v[1]));
+          }
+          break;
         }
         count++;
       }
@@ -180,11 +203,15 @@ int main()
     else if (cmd == "settings")
     {
       ofstream Config("C:/ProgramData/Password Manager/.config");
-      if (v[0] == "copy") {
-        if (v[1] == "enabled") {
+      if (v[0] == "copy")
+      {
+        if (v[1] == "enabled")
+        {
           Config << 1;
           cout << "Enabled automatic copying.\n";
-        } else {
+        }
+        else
+        {
           Config << 0;
           cout << "Disabled automatic copying.\n";
         }
