@@ -15,15 +15,46 @@ string SplitSTR(string input)
   return array;
 }
 
-string encript(string input, string key)
+string encrypt(string text, string key)
 {
-  string output = input;
-  string keyChars = SplitSTR(key);
-  for (int i = 0; i < output.size(); i++)
+  string cipher;
+  string alphabet;
+
+  for (int i = 32; i <= 126; i++)
   {
-    output[i] = input[i] ^ keyChars[i % (sizeof(keyChars) / sizeof(char))];
+    alphabet += (int)i;
   }
-  return output;
+
+  for (int i = 0; i < text.size(); i++)
+  {
+    char c0 = text[i];
+    char c1 = key[i % key.size()];
+    int start = 0;
+
+    for (int j = 0; j < alphabet.size(); j++)
+    {
+      if (alphabet[j] == c0)
+      {
+        start = j;
+        break;
+      }
+    }
+
+    int offSet = 0;
+
+    for (int j = start; j < start + alphabet.size(); j++)
+    {
+      int letter = j % alphabet.size();
+
+      if (alphabet[letter] == c1)
+      {
+        break;
+      }
+      offSet++;
+    }
+    cipher += alphabet[offSet];
+  }
+  return cipher;
 }
 
 void split(string s, vector<string> &v)
@@ -52,7 +83,7 @@ int main()
   string DataTemp;
   int count = 0;
 
-  ifstream DataCheck("C:/ProgramData/Password Manager/data");
+  ifstream DataCheck("C:/ProgramData/Password Manager/.config");
   getline(DataCheck, i);
   DataCheck.close();
 
@@ -60,7 +91,8 @@ int main()
   {
     cout << "Commencing initial setup.\n";
     CreateDirectory("C:/ProgramData/Password Manager", NULL);
-    ofstream DataNew("C:/ProgramData/Password Manager/data");
+    ofstream DataNew("C:/ProgramData/Password Manager/.config");
+    DataNew << "0";
     DataNew.close();
     cout << "Setup Complete.\n";
   }
@@ -84,13 +116,14 @@ int main()
     split(params, v);
     if (cmd == "add")
     {
-      ofstream DataWrite("C:/ProgramData/Password Manager/data");
-      DataWrite << v[0] << v[1] << encript(v[2], v[3]);
+      ofstream DataWrite("C:/ProgramData/Password Manager/" + v[0] + ".password");
+      DataWrite << v[1] << "\n"
+                << encrypt(v[2], v[3]);
       DataWrite.close();
     }
     else if (cmd == "get")
     {
-      cout << encript(encript(v[0], "KEY"), "KEY");
+      cout << encrypt(v[0], v[1]) << "\n" << encrypt(encrypt(v[0], v[1]), v[1]) << "\n";
     }
     else if (cmd == "help")
     {
