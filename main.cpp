@@ -155,8 +155,7 @@ int main()
     if (cmd == "add")
     {
       ofstream DataWrite("C:/ProgramData/Password Manager/" + v[0] + ".password");
-      DataWrite << v[1] << "\n"
-                << encrypt(v[2], v[3]);
+      DataWrite << v[1] << "\n"<< encrypt(v[2], v[3]);
       DataWrite.close();
       cout << "Added: " << v[0] << ", with username: " << v[1] << ", and encrypted password as: " << encrypt(v[2], v[3]) << ".\n";
     }
@@ -210,17 +209,29 @@ int main()
           Config << 1;
           cout << "Enabled automatic copying.\n";
         }
-        else
+        else if (v[1] == "disabled")
         {
           Config << 0;
           cout << "Disabled automatic copying.\n";
         }
+        else
+        {
+          cout << "Invalid value.\n";
+        }
         Config.close();
       }
+      else
+      {
+        cout << "No Settings " << v[0] << " found.\n";
+      }
+    }
+    else if (cmd == "list")
+    {
+      
     }
     else if (cmd == "help")
     {
-      cout << "Usage [command] [params]\n\nSettings:\n  Copy - Enabled: automatically coppies password to keyboard.\n\nCommands:\n  add [name] [username] [password] [encryption key] - Adds/Updates a password.\n  get [name] [encryption key] - Fetches and returns username + password.\n  delete [name] - Deletes password.\n  settings [setting] [value] - Updates a setting.\n  help - Displays all commands and information.\n  version - Displays the version.\n  exit - Exits the program.\n\n  Everything except password-names/usernames/passwords should be lowercase.\n";
+      cout << "Usage [command] [params]\n\nSettings:\n  Copy - Enabled: automatically coppies password to keyboard.\n\nCommands:\n  add [name] [username] [password] [encryption key] - Adds/Updates a password.\n  get [name] [encryption key] - Fetches and returns username + password.\n  delete [name] - Deletes password.\n  settings [setting] [value] - Updates a setting.\n  list - Lists all names of passwords.\n  help - Displays all commands and information.\n  version - Displays the version.\n  exit - Exits the program.\n\n  Everything except password-names/usernames/passwords should be lowercase.\n";
     }
     else if (cmd == "version")
     {
